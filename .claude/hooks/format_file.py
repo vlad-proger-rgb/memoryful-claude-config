@@ -54,8 +54,11 @@ def main() -> None:
     path = Path(raw_path).resolve()
 
     if path.is_relative_to(BACKEND) and path.suffix == ".py":
-        run([venv_bin("black"), "--quiet", str(path)], cwd=BACKEND)
-        run([venv_bin("isort"), "--quiet", str(path)], cwd=BACKEND)
+        # ruff replaces isort + black. `check --fix` sorts imports and applies safe
+        # lint fixes, `format` handles layout — in that order, so the formatter has
+        # the last word. cwd=BACKEND is what lets both find pyproject.toml.
+        run([venv_bin("ruff"), "check", "--fix", "--quiet", str(path)], cwd=BACKEND)
+        run([venv_bin("ruff"), "format", "--quiet", str(path)], cwd=BACKEND)
         return
 
     if path.is_relative_to(FRONTEND) and path.suffix in FRONTEND_SUFFIXES:
