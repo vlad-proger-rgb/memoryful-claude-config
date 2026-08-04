@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "permissions": {
+    "allow": [
+      "Bash(docker compose -p memoryful --env-file .env.local -f docker/docker-compose.local.yml:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker compose logs:*)",
+      "Bash(docker exec -it memoryful-ollama-local ollama list)",
+      "Bash(docker exec memoryful-ollama-local ollama list)",
+      "Bash(curl http://localhost:8000/*)",
+      "Bash(curl http://localhost:3001/*)",
+      "Bash(curl http://localhost:11434/*)",
+      "Bash(npm run type-check)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run format:*)",
+      "Bash(npm run test:unit:*)",
+      "Bash(npx prettier:*)",
+      "Bash(mypy:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(alembic history:*)",
+      "Bash(alembic current:*)",
+      "Bash(alembic heads:*)"
+    ],
+
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(alembic downgrade:*)",
+      "Bash(python scripts/python/manage_backup.py:*)",
+      "Bash(npm install:*)",
+      "Bash(pip install:*)"
+    ],
+
+    "deny": [
+      "Read(./memoryful-backend/.env)",
+      "Read(./memoryful-backend/.env.local.secrets)",
+      "Read(./memoryful-backend/secrets/**)",
+      "Read(./memoryful-backend/backups/**)",
+      "Read(./memoryful-backend/mcp_server/.env)",
+      "Read(./memoryful-backend/scripts/python/.env)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Edit(./memoryful-backend/alembic/versions/**)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm -rf:*)"
+    ],
+
+    "additionalDirectories": [
+      "./memoryful-backend",
+      "./memoryful-frontend"
+    ]
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect_prod.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__ticktick__(create_task|batch_add_tasks)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/ticktick_scope.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/format_file.py\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

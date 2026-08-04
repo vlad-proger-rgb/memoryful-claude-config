@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "postgres-local": {
+      "command": "uvx",
+      "args": ["--with", "mcp<2", "postgres-mcp", "--access-mode=unrestricted"],
+      "env": {
+        "DATABASE_URI": "postgresql://${POSTGRES_USER:-main_user}:${POSTGRES_PASSWORD:-main_password}@localhost:5444/${POSTGRES_DB:-main_database}"
+      }
+    },
+
+    "ticktick": {
+      "type": "http",
+      "url": "https://mcp.ticktick.com",
+      "headers": {
+        "Authorization": "Bearer ${TICKTICK_TOKEN}"
+      }
+    },
+
+    "langchain-docs": {
+      "type": "http",
+      "url": "https://docs.langchain.com/mcp"
+    },
+
+    "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.figma.com/mcp",
+        "--static-oauth-client-metadata",
+        "{\"client_name\":\"Claude Code\",\"client_uri\":\"https://claude.com/claude-code\"}"
+      ]
+    }
+  }
+}

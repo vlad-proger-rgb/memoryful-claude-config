@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "memoryful-frontend", "run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "api",
+      "url": "http://localhost:8000",
+      "port": 8000
+    }
+  ]
+}

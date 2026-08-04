@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "//": "Copy to settings.local.json and fill in the tokens. That file is gitignored; this one is committed as the template. .mcp.json references ${VARS} that resolve from the env block below.",
+
+  "env": {
+    "TICKTICK_TOKEN": "PASTE_TICKTICK_TOKEN_HERE"
+  },
+
+  "enabledMcpjsonServers": ["postgres-local", "ticktick", "langchain-docs", "figma"],
+
+  "permissions": {
+    "//": "Read-only MCP tools are allowed outright; every write falls through to a prompt. MCP rules take no wildcards, so each tool is listed by name — see the full list in the real settings.local.json.",
+    "allow": [
+      "mcp__postgres-local__list_schemas",
+      "mcp__postgres-local__list_objects",
+      "mcp__ticktick__list_projects",
+      "mcp__ticktick__get_project_with_undone_tasks",
+      "mcp__ticktick__search_task",
+      "mcp__ticktick__list_tags",
+      "mcp__langchain-docs"
+    ],
+    "ask": ["mcp__postgres-local__execute_sql", "mcp__ticktick__create_task"]
+  }
+}

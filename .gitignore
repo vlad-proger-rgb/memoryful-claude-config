@@ -1,0 +1,22 @@
+# This repo versions ONLY the Claude Code configuration that lives at the workspace
+# root. The workspace also contains memoryful-backend/ and memoryful-frontend/, which
+# are their own independent repos and must stay out of this one.
+#
+# Strategy: ignore every top-level entry, then re-include the config explicitly.
+# Adding a new config file at the root means adding a matching `!` line here.
+
+/*
+
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/.mcp.json
+!/.claude/
+
+# Never commit the personal layer: it holds API tokens (TickTick) and machine-local
+# overrides. `.mcp.json` is committed and references ${VARS} that resolve from here.
+/.claude/settings.local.json
+
+# Runtime noise
+__pycache__/
+*.pyc
