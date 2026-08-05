@@ -54,10 +54,13 @@ def main() -> None:
     path = Path(raw_path).resolve()
 
     if path.is_relative_to(BACKEND) and path.suffix == ".py":
-        # ruff replaces isort + black. `check --fix` sorts imports and applies safe
-        # lint fixes, `format` handles layout — in that order, so the formatter has
-        # the last word. cwd=BACKEND is what lets both find pyproject.toml.
-        run([venv_bin("ruff"), "check", "--fix", "--quiet", str(path)], cwd=BACKEND)
+        # `--select I` restricts the fixer to import SORTING. A bare `check --fix`
+        # also applies F401, which deletes "unused" imports — and mid-edit that is
+        # routinely wrong: change an import in one edit and its usage in the next,
+        # and the hook fires in between and removes the import you just added.
+        # Sorting and formatting never remove code, so they are safe to automate.
+        # Everything else stays on an explicit `ruff check --fix`.
+        run([venv_bin("ruff"), "check", "--select", "I", "--fix", "--quiet", str(path)], cwd=BACKEND)
         run([venv_bin("ruff"), "format", "--quiet", str(path)], cwd=BACKEND)
         return
 
