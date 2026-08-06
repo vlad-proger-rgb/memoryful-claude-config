@@ -1,0 +1,32 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5444,
+            "driver": "PostgreSQL",
+            "name": "Memoryful",
+            "database": "main_database",
+            "username": "main_user"
+        }
+    ],
+    "cSpell.words": [
+        "Memoryful"
+    ],
+    "git.autoRepositoryDetection": true,
+    "git.scanRepositories": [
+        "memoryful-backend",
+        "memoryful-frontend"
+    ],
+    "ruff.configuration": "./memoryful-backend/pyproject.toml",
+    "mypy-type-checker.importStrategy": "useBundled",
+    "mypy-type-checker.path": ["${workspaceFolder}/memoryful-backend/.venv/Scripts/mypy.exe"],
+    "mypy-type-checker.cwd": "${workspaceFolder}/memoryful-backend",
+    "python.terminal.shellIntegration.enabled": false,
+    "python.terminal.activateEnvironment": false,
+    "terminal.integrated.environmentChangesRelaunch": false,
+    "terminal.integrated.automationProfile.windows": {
+        "path": "powershell.exe"
+    }
+}

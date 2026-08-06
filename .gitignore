@@ -12,6 +12,7 @@
 !/CLAUDE.md
 !/.mcp.json
 !/.claude/
+!/.vscode/
 
 # Never commit the personal layer: it holds API tokens (TickTick) and machine-local
 # overrides. `.mcp.json` is committed and references ${VARS} that resolve from here.

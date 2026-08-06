@@ -1,0 +1,89 @@
+﻿{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "BE",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": ["-NoExit", "-Command", "& .venv/Scripts/Activate.ps1; cls"],
+            "options": {
+                "cwd": "${workspaceFolder}/memoryful-backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "FE",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": ["-NoExit", "-Command", "cls"],
+            "options": {
+                "cwd": "${workspaceFolder}/memoryful-frontend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "GCS",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": ["-NoExit", "-Command", "cls"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Py",
+            "type": "process",
+            "command": "${workspaceFolder}/memoryful-backend/.venv/Scripts/python.exe",
+            "args": ["-i"],
+            "options": {
+                "cwd": "${workspaceFolder}/memoryful-backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}
