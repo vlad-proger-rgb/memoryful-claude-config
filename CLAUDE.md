@@ -40,6 +40,9 @@ that's expected.
 - **Commit only when asked.** Never commit unprompted — I read the whole diff first.
   When I do ask, you write the commit message and commit both repos yourself; don't
   hand the message back for me to paste.
+- **Comment only what's genuinely surprising, in one line.** If a decision needs a
+  paragraph to defend, refactor until it doesn't. Rationale that belongs in history goes
+  in the commit message, not the source.
 - **Never *run* anything against production.** No `docker-compose.vm.yml`, no
   `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; do not work
   around it. Local work runs against a *restored copy* of prod data.
