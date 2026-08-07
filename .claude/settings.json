@@ -6,6 +6,7 @@
       "Bash(docker compose -p memoryful --env-file .env.local -f docker/docker-compose.local.yml:*)",
       "Bash(docker ps:*)",
       "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
       "Bash(docker compose logs:*)",
       "Bash(docker exec -it memoryful-ollama-local ollama list)",
       "Bash(docker exec memoryful-ollama-local ollama list)",
@@ -89,6 +90,11 @@
             "type": "command",
             "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/format_file.py\"",
             "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/typecheck_file.py\"",
+            "timeout": 120
           }
         ]
       }

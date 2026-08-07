@@ -9,6 +9,7 @@ script exits 0 regardless.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import subprocess
@@ -23,16 +24,14 @@ FRONTEND_SUFFIXES = {".ts", ".tsx", ".js", ".vue", ".css", ".json", ".md"}
 
 
 def run(command: list[str], cwd: Path) -> None:
-    try:
-        subprocess.run(
+    with contextlib.suppress(OSError, subprocess.SubprocessError):
+        subprocess.run(  # noqa: S603  # fixed argv, no shell interpolation
             command,
             cwd=cwd,
             capture_output=True,
             timeout=30,
             shell=(sys.platform == "win32"),
         )
-    except (OSError, subprocess.SubprocessError):
-        pass  # Formatter missing or file unparseable — leave the edit alone.
 
 
 def venv_bin(name: str) -> str:

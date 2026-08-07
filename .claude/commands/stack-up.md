@@ -27,10 +27,5 @@ Then:
 4. The `app` container runs `alembic upgrade head` before uvicorn. If it's down, check its
    logs for an Alembic error before assuming anything else — a failed migration stops the
    chain and uvicorn never starts.
-5. **`flower` logs a wall of tracebacks on every cold start** — `kombu ... Connection
-   refused`, often 50-80 lines. It has no healthcheck wait on rabbitmq and just retries.
-   Judge it by the *last* line: `Connected to amqp://...` means it recovered. Only report
-   it if that line is missing or `:5555` doesn't answer. Grepping logs for "ERROR" and
-   reporting a count is misleading here.
-6. Report a one-line-per-service status table. Do not start the frontend — that is `/verify`
+5. Report a one-line-per-service status table. Do not start the frontend — that is `/verify`
    or a separate `npm run dev`.

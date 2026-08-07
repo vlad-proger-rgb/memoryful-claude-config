@@ -26,8 +26,8 @@ Frontend dev server is **:3000**, and `vite.config.ts` proxies the API path pref
 `http://localhost:8000`. So the app is at `http://localhost:3000` and there is no CORS
 step in local dev.
 
-Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · rabbitmq 15673 (UI) · flower 5555 ·
-minio 9000/9001 · pubsub 8085 · ollama 11434.
+Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · minio 9000/9001 · pubsub 8085 ·
+ollama 11434.
 
 Local login accepts **any** verification code for the addresses listed in `TRUSTED_EMAILS`
 in `memoryful-backend/.env.local` — a development-only bypass, so browser-driven testing

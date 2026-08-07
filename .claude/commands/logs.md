@@ -9,7 +9,7 @@ Containers:
 !`docker ps -a --filter name=memoryful --format "{{.Names}}\t{{.Status}}"`
 
 Service: `$1` — accepts either the compose service name (`app`, `mcp`, `db`, `celery`,
-`redis`, `rabbitmq`, `flower`, `minio`, `ollama`) or the full container name like
+`redis`, `minio`, `ollama`, `pubsub-emulator`) or the full container name like
 `memoryful-app-local`. Line count: `$2`.
 
 **If `$1` came through empty**, I invoked this bare. Default to `app` and say so — don't
