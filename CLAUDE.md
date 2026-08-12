@@ -43,6 +43,14 @@ that's expected.
 - **Comment only what's genuinely surprising, in one line.** If a decision needs a
   paragraph to defend, refactor until it doesn't. Rationale that belongs in history goes
   in the commit message, not the source.
+- **American English everywhere** — identifiers, comments, docstrings, docs, commit
+  messages. `color`, `initialize`, `behavior`, `canceled`. The exception is a name a
+  library or spec owns: pydantic's `settings_customise_sources` and HTML's
+  `aria-labelledby` are its spelling, not ours, and "correcting" them silently breaks
+  the binding.
+- **Mobile counts as much as desktop.** Any visual change gets checked at phone width as
+  well, and anything that only misbehaves there is tagged `mobile` on the board. The
+  frontend's `CLAUDE.md` has the conventions.
 - **Never *run* anything against production.** No `docker-compose.vm.yml`, no
   `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; do not work
   around it. Local work runs against a *restored copy* of prod data.
@@ -78,7 +86,17 @@ fix(cache): clear day namespaces when a tag is mutated
 refactor(ai): route chat completions through the MCP sidecar
 - Replace the direct tool registry with tools loaded from MCP_SERVER_URL
 - Drop the duplicated tool schemas that drifted from the server's
+
+ci(deploy): fail the deploy when the app never answers
+- Poll the root route from inside the app container after recreating it, and
+  exit non-zero with the log tail if it never responds
+- A broken migration leaves uvicorn unstarted and the container gone, which
+  previously still reported a successful deploy
 ```
+
+A bullet claims what the commit *does*. "Eliminate the broken migration" is wrong for a
+change that only *detects* one — it sends the next reader hunting for logic that isn't
+there. Deployment tooling is `ci`, not `fix`: the pipeline changed, the app didn't.
 
 **One feature, one commit.** That's the default unit — a working, revertable increment.
 Don't split a migration away from the model change that motivated it; they ship together or

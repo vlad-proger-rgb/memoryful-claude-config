@@ -9,7 +9,7 @@
   "enabledMcpjsonServers": ["postgres-local", "ticktick", "langchain-docs", "figma"],
 
   "permissions": {
-    "//": "Read-only MCP tools are allowed outright; every write falls through to a prompt. MCP rules take no wildcards, so each tool is listed by name — see the full list in the real settings.local.json.",
+    "//": "Read-only MCP tools are allowed outright; every write falls through to a prompt. MCP rules take no wildcards, so each tool is listed by name — see the full list in the real settings.local.json. Never list create_task or batch_add_tasks under ask: an explicit ask outranks ticktick_scope.py's allow and silently disables the hook.",
     "allow": [
       "mcp__postgres-local__list_schemas",
       "mcp__postgres-local__list_objects",
@@ -19,6 +19,6 @@
       "mcp__ticktick__list_tags",
       "mcp__langchain-docs"
     ],
-    "ask": ["mcp__postgres-local__execute_sql", "mcp__ticktick__create_task"]
+    "ask": ["mcp__postgres-local__execute_sql", "mcp__ticktick__update_task"]
   }
 }

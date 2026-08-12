@@ -39,6 +39,7 @@
     ],
 
     "deny": [
+      "Read(./.claude/settings.local.json)",
       "Read(./memoryful-backend/.env)",
       "Read(./memoryful-backend/.env.local.secrets)",
       "Read(./memoryful-backend/secrets/**)",

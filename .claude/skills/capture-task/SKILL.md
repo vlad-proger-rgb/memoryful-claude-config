@@ -29,8 +29,12 @@ intent to start soon — don't park real bugs there.
 there's a reason.
 
 **Tags** — use the lowercase slug, not the display label:
-`cleanup` `deployment` `extensions` `memoryfulai` `mvp` `newfeature` `organization`
+`cleanup` `deployment` `extensions` `memoryfulai` `mobile` `mvp` `newfeature` `organization`
 `over-engineering` `post-release` `refactor` `research` `subscription` `tests` `ui` `claude`
+
+`mobile` collects the phone/tablet support effort — anything that only misbehaves at a
+narrow width, on touch, or inside the planned store wrapper. It is being actively filled,
+so add it to any finding of that shape even when another tag also applies.
 
 Two tags on this board belong to other projects and must never be used here: `discuss`
 (cross-team discussion elsewhere) and `jobhunt`. Use existing tags only — if none fit, say
