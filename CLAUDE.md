@@ -1,6 +1,9 @@
 # Memoryful — workspace root
 
-AI-powered life journal. This folder is **not** a git repo; it holds two independent ones:
+AI-powered life journal. Three independent git repos, and **this folder is one of them** —
+it versions only the workspace tooling (`.claude/`, `.mcp.json`, `.vscode/`, this file).
+Its `.gitignore` ignores every top-level entry and re-includes those by name, which is what
+keeps the two application repos out of it:
 
 | Path | What | Repo |
 | --- | --- | --- |
@@ -40,6 +43,10 @@ that's expected.
 - **Commit only when asked.** Never commit unprompted — I read the whole diff first.
   When I do ask, you write the commit message and commit both repos yourself; don't
   hand the message back for me to paste.
+- **Work lands on `dev`, never `main`.** Both application repos have a `dev` branch and
+  that's where commits go; `main` is release state. Check the current branch before
+  committing — a commit that lands on `main` by accident is a genuine headache to move
+  afterwards. The workspace-root repo is the exception: it only has `main`.
 - **Comment only what's genuinely surprising, in one line.** If a decision needs a
   paragraph to defend, refactor until it doesn't. Rationale that belongs in history goes
   in the commit message, not the source.
