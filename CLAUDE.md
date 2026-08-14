@@ -2,20 +2,18 @@
 
 AI-powered life journal. Three independent git repos, and **this folder is one of them** —
 it versions only the workspace tooling (`.claude/`, `.mcp.json`, `.vscode/`, this file).
-Its `.gitignore` ignores every top-level entry and re-includes those by name, which is what
-keeps the two application repos out of it:
 
 | Path | What | Repo |
 | --- | --- | --- |
 | `memoryful-backend/` | FastAPI + async SQLAlchemy + Celery, runs in Docker | own git repo |
 | `memoryful-frontend/` | Vue 3 + Vite + Tailwind SPA | own git repo |
 
-Each has its own `CLAUDE.md` with the details — those load automatically when you touch
-files inside them. Keep this file to things that span both.
+Each has its own `CLAUDE.md`, loaded when you touch files inside it. Keep this file to
+things that span both.
 
 ## The local loop
 
-The backend runs entirely in Docker; the frontend runs on the host and proxies to it.
+Backend runs in Docker; frontend runs on the host and proxies to it.
 
 ```bash
 # 1. backend stack (from memoryful-backend/)
@@ -25,83 +23,57 @@ docker compose -p memoryful --env-file .env.local -f docker/docker-compose.local
 npm run dev
 ```
 
-Frontend dev server is **:3000**, and `vite.config.ts` proxies the API path prefixes to
-`http://localhost:8000`. So the app is at `http://localhost:3000` and there is no CORS
-step in local dev.
+The app is at `http://localhost:3000`, which proxies the API prefixes to `:8000` — so no
+CORS step locally. Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · minio 9000/9001 ·
+pubsub 8085 · ollama 11434.
 
-Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · minio 9000/9001 · pubsub 8085 ·
-ollama 11434.
-
-Local login accepts **any** verification code for the addresses listed in `TRUSTED_EMAILS`
-in `memoryful-backend/.env.local` — a development-only bypass, so browser-driven testing
-needs no real inbox. Read that variable to get the address; `123123` works as the code.
-Restored days reference photos in production GCS, so their images render broken locally;
-that's expected.
+Local login takes **any** code for the addresses in `TRUSTED_EMAILS`; `123123` works. The
+address is in `.claude/local-context.md` below — the value in `.env.local` is a placeholder,
+and the real one is overridden in `.env.local.secrets`, which holds live API keys and is
+denied by `settings.json`. Never read that file. Restored days reference photos in
+production GCS, so those images render broken locally — expected.
 
 ## Rules
 
-- **Commit only when asked.** Never commit unprompted — I read the whole diff first.
-  When I do ask, you write the commit message and commit both repos yourself; don't
-  hand the message back for me to paste.
-- **Work lands on `dev`, never `main`.** Both application repos have a `dev` branch and
-  that's where commits go; `main` is release state. Check the current branch before
-  committing — a commit that lands on `main` by accident is a genuine headache to move
-  afterwards. The workspace-root repo is the exception: it only has `main`.
-- **Comment only what's genuinely surprising, in one line.** If a decision needs a
-  paragraph to defend, refactor until it doesn't. Rationale that belongs in history goes
-  in the commit message, not the source.
-- **American English everywhere** — identifiers, comments, docstrings, docs, commit
-  messages. `color`, `initialize`, `behavior`, `canceled`. The exception is a name a
-  library or spec owns: pydantic's `settings_customise_sources` and HTML's
-  `aria-labelledby` are its spelling, not ours, and "correcting" them silently breaks
-  the binding.
-- **Mobile counts as much as desktop.** Any visual change gets checked at phone width as
-  well, and anything that only misbehaves there is tagged `mobile` on the board. The
-  frontend's `CLAUDE.md` has the conventions.
+- **Commit only when asked.** I read the whole diff first. When I do ask, write the message
+  and commit yourself; don't hand it back for me to paste.
+- **Work lands on `dev`, never `main`.** Check the branch before committing — a commit that
+  lands on `main` is a headache to move. The workspace-root repo only has `main`.
+- **Comment only what's genuinely surprising, in one line.** If a decision needs a paragraph
+  to defend, refactor until it doesn't. Rationale belongs in the commit message.
+- **American English everywhere** — `color`, `initialize`, `behavior`, `canceled`. Exception:
+  names a library or spec owns, like `settings_customise_sources` and `aria-labelledby`;
+  "correcting" those breaks the binding.
+- **Mobile counts as much as desktop.** Check every visual change at phone width; anything
+  that only misbehaves there is tagged `mobile` on the board.
 - **Finished work goes in a TickTick *comment*, never over the task body.** The body is the
-  brief — the observed problem, the code anchors, the spec, the callers to check — and a
-  completion report written over it destroys exactly what made the task worth keeping.
-  Appending is fine only when it reads cleanly and doesn't disturb the body. Same when the
-  body turns out to be *wrong* rather than merely finished: say so in a comment, so the
-  correction is visible as a correction.
-  Keep the comment **short and to the point** — a few lines, not an essay. What changed, and
-  anything that would bite the next person. A comment nobody finishes reading is worth
-  nothing; the diff is where the detail already lives.
+  brief, and a completion report written over it destroys what made the task worth keeping.
+  Same when the body turns out to be *wrong*: correct it in a comment, so the correction
+  reads as one. Keep it to a few lines — what changed, and what would bite the next person;
+  the diff holds the detail. The 1024-char cap truncates silently, but it's a backstop, not
+  a target: a comment trimmed to fit was already too long.
 - **Never *run* anything against production.** No `docker-compose.vm.yml`, no
-  `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; do not work
-  around it. Local work runs against a *restored copy* of prod data.
-- **`.env.prod` is editable config, not a secret.** It holds non-secret production
-  settings only — real secrets come from GCP Secret Manager inside the VM at runtime, and
-  `deploy-app.sh` just does `cp .env.prod .env` on the box. So a new setting normally lands
-  in `.env.local` *and* `.env.prod` in the same pass. Adding one there is expected; only
-  deploying it is off limits.
-- **Always pass `--env-file .env.local` explicitly.** Compose auto-loads a bare `.env`
-  for `${VAR}` interpolation, and that file is host tooling only — it holds a single
-  variable, `BACKUP_SOURCE_URL`, the production Neon connection string that
-  `manage_backup.py` dumps from. Omitting the flag silently leaves compose-level vars
-  empty (classic symptom: Redis `invalid username-password pair`).
-- Real secrets live in `.env.local.secrets` — mostly AI provider keys
-  (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`) and `LLM_MODE`. Gitignored, and `env_file:`
-  loads it after `.env.local` so it wins. `.env.local` is committed with placeholders —
-  never put a real key there.
+  `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; don't work around
+  it. Local work runs against a *restored copy* of prod data.
+- **`.env.prod` is editable config, not a secret** — real secrets come from GCP Secret
+  Manager in the VM at runtime. A new setting normally lands in `.env.local` *and*
+  `.env.prod` in the same pass; only deploying it is off limits.
+- **Always pass `--env-file .env.local`.** Compose otherwise auto-loads the bare `.env`,
+  which is host tooling only, and silently leaves compose-level vars empty — classic symptom
+  is Redis `invalid username-password pair`. Real secrets sit in gitignored
+  `.env.local.secrets`, loaded after `.env.local` so it wins; `.env.local` is committed with
+  placeholders, so never put a real key there.
 
 ## Commit convention
 
-`type(scope): summary` — imperative mood, lowercase after the colon, no trailing period,
-subject under ~72 chars. Types: `feat` `fix` `refactor` `perf` `docs` `test` `chore` `build`
-`ci`. Scope is the area touched, not the file: `api`, `ai`, `auth`, `db`, `cache`, `mcp`,
-`docker`, `deps`, `ui`, `day`, `workspace`.
+`type(scope): summary` — imperative, lowercase after the colon, no trailing period, under
+~72 chars. Scope is the area touched, not the file.
 
-Body only when the summary genuinely isn't enough. When present it's `- ` bullets, one per
-distinct change, explaining *what changed and why* — never a restatement of the diff. No
-body at all is the common case and is fine.
+Body only when the summary isn't enough: `- ` bullets, one per distinct change, saying
+*what changed and why*, never restating the diff. No body is the common case.
 
 ```
 fix(cache): clear day namespaces when a tag is mutated
-
-refactor(ai): route chat completions through the MCP sidecar
-- Replace the direct tool registry with tools loaded from MCP_SERVER_URL
-- Drop the duplicated tool schemas that drifted from the server's
 
 ci(deploy): fail the deploy when the app never answers
 - Poll the root route from inside the app container after recreating it, and
@@ -110,33 +82,33 @@ ci(deploy): fail the deploy when the app never answers
   previously still reported a successful deploy
 ```
 
-A bullet claims what the commit *does*. "Eliminate the broken migration" is wrong for a
-change that only *detects* one — it sends the next reader hunting for logic that isn't
-there. Deployment tooling is `ci`, not `fix`: the pipeline changed, the app didn't.
+A bullet claims what the commit *does*: "Eliminate the broken migration" is wrong for a
+change that only *detects* one. Deployment tooling is `ci`, not `fix` — the pipeline
+changed, the app didn't.
 
-**One feature, one commit.** That's the default unit — a working, revertable increment.
-Don't split a migration away from the model change that motivated it; they ship together or
-the tree is broken in between. Only break a feature up when it's genuinely large, and then
-split along boundaries that each stand on their own.
+**One feature, one commit** — a working, revertable increment. Don't split a migration from
+the model change that motivated it. Split only when a feature is genuinely large, along
+boundaries that each stand alone. The other extreme is worse: if the body needs more than
+~6 bullets, or the bullets are unrelated, that's two or three features wearing a trenchcoat.
 
-What to avoid is the other extreme: a commit that carries a schema redesign, a perf fix, a
-refactor and a cleanup at once. If the body needs more than ~6 bullets, or the bullets
-describe unrelated concerns, that's two or three features wearing a trenchcoat.
-
-Both repos are committed in the same pass when a change spans them, with messages that
-mirror each other so the pair is findable later.
+Both repos commit in the same pass when a change spans them, with mirrored messages.
 
 ## Cross-repo
 
 - The API contract is hand-maintained on both sides: `app/schemas/` in the backend,
-  `src/api/*.ts` + `src/types/` in the frontend. There is no codegen — change one,
-  change the other in the same pass.
-- Adding a **new top-level API prefix** means editing the proxy regex in
-  `memoryful-frontend/vite.config.ts`. Forgetting this is the usual cause of a new
-  endpoint 404-ing in dev while working fine in Swagger.
-- `memoryful-backend/mcp_server/` is a separate MCP server exposing read-only tools over
-  the same API. New read endpoints usually want a tool there too.
+  `src/api/*.ts` + `src/types/` in the frontend. No codegen — change one, change the other.
+- A **new top-level API prefix** means editing the proxy regex in
+  `memoryful-frontend/vite.config.ts`. Forgetting it is the usual cause of a new endpoint
+  404-ing in dev while working fine in Swagger.
+- `memoryful-backend/mcp_server/` exposes read-only tools over the same API. New read
+  endpoints usually want a tool there too.
 
 ## Slash commands
 
 `/stack-up` `/stack-reset` `/logs` `/db-refresh` `/migration` `/verify` — see `.claude/commands/`.
+
+## Local context
+
+Machine-local, gitignored, and safe to read — no secrets go in it.
+
+@.claude/local-context.md

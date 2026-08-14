@@ -18,6 +18,9 @@
 # overrides. `.mcp.json` is committed and references ${VARS} that resolve from here.
 /.claude/settings.local.json
 
+# Machine-local context imported by CLAUDE.md — local addresses, personal notes.
+/.claude/local-context.md
+
 # Runtime noise
 __pycache__/
 *.pyc
