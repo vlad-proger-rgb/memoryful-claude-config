@@ -58,6 +58,15 @@ that's expected.
 - **Mobile counts as much as desktop.** Any visual change gets checked at phone width as
   well, and anything that only misbehaves there is tagged `mobile` on the board. The
   frontend's `CLAUDE.md` has the conventions.
+- **Finished work goes in a TickTick *comment*, never over the task body.** The body is the
+  brief — the observed problem, the code anchors, the spec, the callers to check — and a
+  completion report written over it destroys exactly what made the task worth keeping.
+  Appending is fine only when it reads cleanly and doesn't disturb the body. Same when the
+  body turns out to be *wrong* rather than merely finished: say so in a comment, so the
+  correction is visible as a correction.
+  Keep the comment **short and to the point** — a few lines, not an essay. What changed, and
+  anything that would bite the next person. A comment nobody finishes reading is worth
+  nothing; the diff is where the detail already lives.
 - **Never *run* anything against production.** No `docker-compose.vm.yml`, no
   `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; do not work
   around it. Local work runs against a *restored copy* of prod data.
