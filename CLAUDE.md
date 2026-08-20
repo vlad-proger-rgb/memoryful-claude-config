@@ -52,9 +52,13 @@ production GCS, so those images render broken locally — expected.
   reads as one. Keep it to a few lines — what changed, and what would bite the next person;
   the diff holds the detail. The 1024-char cap truncates silently, but it's a backstop, not
   a target: a comment trimmed to fit was already too long.
-- **Never *run* anything against production.** No `docker-compose.vm.yml`, no
-  `deploy-app.sh`, no `gcloud`/`psql` against Neon. A hook blocks these; don't work around
+- **Never *change* anything in production.** No `docker-compose.vm.yml`, no
+  `deploy-app.sh`, no deploying, nothing that writes. A hook blocks these; don't work around
   it. Local work runs against a *restored copy* of prod data.
+  **Observing** prod is allowed, through one narrow door: the `production-analyzer` agent
+  reads container status and logs over a fixed allow-list in `protect_prod.py`. Everything
+  outside that list — including an interactive shell on the VM — stays denied. A refusal
+  there is the design working; report it rather than rephrasing around it.
 - **`.env.prod` is editable config, not a secret** — real secrets come from GCP Secret
   Manager in the VM at runtime. A new setting normally lands in `.env.local` *and*
   `.env.prod` in the same pass; only deploying it is off limits.

@@ -5,12 +5,17 @@ a decision back as JSON on stdout. Printing nothing means "no opinion, carry on"
 
     DENY  -> blocked outright, no prompt shown
     ASK   -> destructive but legitimate; a human has to confirm
+    ALLOW -> proven read-only; runs without a prompt
 
 Patterns are matched against the whole command string, so a bare filename would also
 fire on `cat scripts/…`, on a grep, and on a commit message that merely names the file.
 The rules below anchor on the *command word* instead: reading and describing these files
 is fine, running them is not. Anything not proven to be an invocation falls through to
 Claude Code's own permission prompt, since none of these scripts is on the allow-list.
+
+ALLOW alone is matched with fullmatch, so nothing may surround it: a trailing
+`; docker restart` drops through to DENY instead. Its remote grammar admits no shell
+metacharacter, and LEAK is checked first, so no allowed read can carry a credential.
 """
 
 from __future__ import annotations
@@ -27,14 +32,46 @@ CMD = r"(?:^|[\n;&|(]\s*)(?:sudo\s+)?"
 # Same position, but allowing an interpreter and a directory prefix before the script.
 RUN = CMD + r"(?:(?:bash|sh|zsh|source|exec)\s+)?\S*"
 
+VM_CONTAINER = r"(?:memoryful-(?:app|mcp|nginx)|celery-worker|certbot-renew|watchtower)"
+
+VM_READ = "|".join(
+    (
+        r"docker\s+ps(?:\s+-a)?",
+        r"docker\s+logs(?:\s+--tail=\d{1,5})?(?:\s+--since=\d{1,4}[smhd])?\s+" + VM_CONTAINER,
+        r"docker\s+inspect\s+" + VM_CONTAINER,
+        r"docker\s+stats\s+--no-stream",
+        r"free\s+-[mh]",
+        r"df\s+-h",
+        r"uptime",
+    )
+)
+
+GFLAG = r"--[a-z-]+(?:=[\w.:@/-]+)?"  # --zone=…, --project=… — never a quoted value.
+
 
 def rules(*pairs: tuple[str, str]) -> list[Rule]:
     return [(re.compile(p, re.IGNORECASE), why) for p, why in pairs]
 
 
+ALLOW: list[Rule] = rules(
+    (
+        rf"gcloud\s+compute\s+instances\s+(?:describe|list)(?:\s+[\w.@-]+)?(?:\s+{GFLAG})*",
+        "only reads VM metadata",
+    ),
+    (
+        rf"gcloud\s+compute\s+ssh\s+[\w.@-]+(?:\s+{GFLAG})*"
+        rf"\s+--command=(?P<q>[\"'])(?:{VM_READ})(?P=q)",
+        "observes the production VM without changing it",
+    ),
+)
+
+LEAK: list[Rule] = rules(
+    (r"neon\.tech|BACKUP_SOURCE_URL", "points at the production Neon database"),
+    (r"--env-file[= ]\.env(\s|$)", "hands the bare .env (prod Neon URL) to compose"),
+)
+
 DENY: list[Rule] = rules(
-    # .env.prod itself is NOT restricted — it holds non-secret prod config and is
-    # meant to be edited alongside .env.local. Only *deploying* it is off limits.
+    # No rule for .env.prod on purpose: editing it is normal, only deploying it is not.
     (
         r"docker[\s-]compose\b[^\n]*?(?:-f|--file)[= ]\s*\S*docker-compose\.vm\.yml",
         "starts the production VM stack",
@@ -42,12 +79,6 @@ DENY: list[Rule] = rules(
     (RUN + r"deploy-app\.sh", "runs the production deploy"),
     (RUN + r"cos-swap-startup\.sh", "runs a production VM startup script"),
     (CMD + r"gcloud\s+(compute|run|secrets|storage\s+rm)", "mutates GCP production resources"),
-    # Broad on purpose, unlike the rules above: these name a live credential rather than
-    # a file, so echoing or grepping one is itself the leak.
-    (r"neon\.tech|BACKUP_SOURCE_URL", "points at the production Neon database"),
-    # The bare .env holds only BACKUP_SOURCE_URL — the prod Neon connection string.
-    # It is host-tooling config for manage_backup.py and must never reach compose.
-    (r"--env-file[= ]\.env(\s|$)", "hands the bare .env (prod Neon URL) to compose"),
 )
 
 ASK: list[Rule] = rules(
@@ -67,12 +98,15 @@ LOCAL_HINT = (
 )
 
 
+TAILS = {
+    "deny": f"Production changes are made by a human, never by an agent. {LOCAL_HINT}",
+    "ask": "Confirm if that is what you want.",
+    "allow": "Observation only — report what it shows, and never act on production.",
+}
+
+
 def respond(decision: str, why: str) -> None:
-    tail = (
-        f"Production changes are made by a human, never by an agent. {LOCAL_HINT}"
-        if decision == "deny"
-        else "Confirm if that is what you want."
-    )
+    tail = TAILS[decision]
     print(
         json.dumps(
             {
@@ -87,6 +121,12 @@ def respond(decision: str, why: str) -> None:
 
 
 def decide(command: str) -> tuple[str, str] | None:
+    for pattern, why in LEAK:
+        if pattern.search(command):
+            return "deny", why
+    for pattern, why in ALLOW:
+        if pattern.fullmatch(command.strip()):
+            return "allow", why
     for ruleset, decision in ((DENY, "deny"), (ASK, "ask")):
         for pattern, why in ruleset:
             if pattern.search(command):
