@@ -33,6 +33,14 @@ and the real one is overridden in `.env.local.secrets`, which holds live API key
 denied by `settings.json`. Never read that file. Restored days reference photos in
 production GCS, so those images render broken locally — expected.
 
+Redis invalidates on writes through the API, so editing the database directly leaves
+`/auth/me` and friends serving the pre-edit row — a test set up with `psql` can silently
+verify nothing. Flush first:
+
+```bash
+docker exec memoryful-redis-local redis-cli -a dev_redis_password --no-auth-warning flushall
+```
+
 ## Rules
 
 - **Commit only when asked.** I read the whole diff first. When I do ask, write the message
