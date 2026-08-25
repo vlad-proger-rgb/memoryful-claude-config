@@ -28,15 +28,16 @@ intent to start soon — don't park real bugs there.
 **Priority**: `0` none · `1` low · `3` medium · `5` high. Not 1-4. Default `0` unless
 there's a reason.
 
-**Tags** — the emoji is *part of the name*, not decoration: passing bare `auth` creates a
-second tag beside `🔑auth`. Tags have no ids in this API, so the name is the only handle there
-is. **Call `list_tags` and copy the `name` field verbatim** instead of retyping an emoji —
-several carry invisible characters (`❇️ui` and `⚜️post-release` end in a variation selector,
-`💅🏻qol` has a skin-tone modifier, `⚙refactor` has neither).
+**Tags** — **call `list_tags` and use the `name` field verbatim.** Every time; don't work from
+a list written down here or from memory.
 
-`🔑auth` `🧹cleanup` `🛫deployment` `🧩extensions` `🤖memoryfulai` `📱mobile` `🌄mvp`
-`🆕newfeature` `📦organization` `📡over-engineering` `⚜️post-release` `⚙refactor` `🔎research`
-`🔐security` `💲subscription` `🧪tests` `❇️ui` `🔭claude` `💅🏻qol` `🚀performance`
+The emoji is *part of the name*, not decoration — passing bare `auth` doesn't match `🔑auth`,
+it silently creates a second tag beside it. Tags have no ids in this API, so the name is the
+only handle there is, and several names carry characters you cannot see: `❇️ui` and
+`⚜️post-release` end in a variation selector, `💅🏻qol` has a skin-tone modifier, `⚙refactor`
+has neither. Retyping an emoji is how the duplicate gets made. Copy, never retype.
+
+Use tags that already exist. If none fit, say so and ask rather than inventing one.
 
 `mobile` collects the phone/tablet support effort — anything that only misbehaves at a
 narrow width, on touch, or inside the planned store wrapper. It is being actively filled,
@@ -46,9 +47,8 @@ so add it to any finding of that shape even when another tag also applies.
 tokens, the users table, account linking. Added 2026-08-21 because that surface ends up
 being a large share of the code and had no way to be seen as one thing.
 
-Two tags on this board belong to other projects and must never be used here: `discuss`
-(cross-team discussion elsewhere) and `jobhunt`. Use existing tags only — if none fit, say
-so and ask rather than inventing one.
+`claude` marks provenance — it goes on everything Claude files and stays there after triage
+moves the task into a working column.
 
 ## The two flows
 
