@@ -28,10 +28,15 @@ intent to start soon — don't park real bugs there.
 **Priority**: `0` none · `1` low · `3` medium · `5` high. Not 1-4. Default `0` unless
 there's a reason.
 
-**Tags** — use the lowercase slug, not the display label:
-`auth` `cleanup` `deployment` `extensions` `memoryfulai` `mobile` `mvp` `newfeature`
-`organization` `over-engineering` `post-release` `refactor` `research` `security`
-`subscription` `tests` `ui` `claude`
+**Tags** — the emoji is *part of the name*, not decoration: passing bare `auth` creates a
+second tag beside `🔑auth`. Tags have no ids in this API, so the name is the only handle there
+is. **Call `list_tags` and copy the `name` field verbatim** instead of retyping an emoji —
+several carry invisible characters (`❇️ui` and `⚜️post-release` end in a variation selector,
+`💅🏻qol` has a skin-tone modifier, `⚙refactor` has neither).
+
+`🔑auth` `🧹cleanup` `📲deployment` `🈸extensions` `🤖memoryfulai` `📱mobile` `🌄mvp`
+`🆕newfeature` `📦organization` `📡over-engineering` `⚜️post-release` `⚙refactor` `🔎research`
+`🔐security` `💲subscription` `🧪tests` `❇️ui` `🔭claude` `💅🏻qol` `🚀performance`
 
 `mobile` collects the phone/tablet support effort — anything that only misbehaves at a
 narrow width, on touch, or inside the planned store wrapper. It is being actively filled,
