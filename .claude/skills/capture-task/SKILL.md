@@ -34,7 +34,7 @@ is. **Call `list_tags` and copy the `name` field verbatim** instead of retyping 
 several carry invisible characters (`❇️ui` and `⚜️post-release` end in a variation selector,
 `💅🏻qol` has a skin-tone modifier, `⚙refactor` has neither).
 
-`🔑auth` `🧹cleanup` `📲deployment` `🈸extensions` `🤖memoryfulai` `📱mobile` `🌄mvp`
+`🔑auth` `🧹cleanup` `🛫deployment` `🧩extensions` `🤖memoryfulai` `📱mobile` `🌄mvp`
 `🆕newfeature` `📦organization` `📡over-engineering` `⚜️post-release` `⚙refactor` `🔎research`
 `🔐security` `💲subscription` `🧪tests` `❇️ui` `🔭claude` `💅🏻qol` `🚀performance`
 
