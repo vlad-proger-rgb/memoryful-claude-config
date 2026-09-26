@@ -81,13 +81,17 @@ docker exec memoryful-redis-local redis-cli -a dev_redis_password --no-auth-warn
 `type(scope): summary` — imperative, lowercase after the colon, no trailing period, under
 ~72 chars. Scope is the area touched, not the file.
 
-Body only when the summary isn't enough: `- ` bullets, one per distinct change, saying
-*what changed and why*, never restating the diff. No body is the common case.
+Body only when the summary isn't enough: a blank line, then `- ` bullets, one per distinct
+change, saying *what changed and why*, never restating the diff. No body is the common case.
+Without the blank line git folds the bullets into the subject.
 
 ```
 fix(cache): clear day namespaces when a tag is mutated
+```
 
+```
 ci(deploy): fail the deploy when the app never answers
+
 - Poll the root route from inside the app container after recreating it, and
   exit non-zero with the log tail if it never responds
 - A broken migration leaves uvicorn unstarted and the container gone, which
