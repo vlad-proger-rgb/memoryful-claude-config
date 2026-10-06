@@ -24,7 +24,7 @@ npm run dev
 ```
 
 The app is at `http://localhost:3000`, which proxies the API prefixes to `:8000` — so no
-CORS step locally. Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · minio 9000/9001 ·
+CORS step locally. Ports: app 8000 · mcp 3001 · db 5444 · redis 6379 · seaweedfs 9000/8888 ·
 pubsub 8085 · ollama 11434.
 
 Local login takes **any** code for the addresses in `TRUSTED_EMAILS`; `123123` works. The

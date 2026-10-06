@@ -9,7 +9,7 @@ Containers:
 !`docker ps -a --filter name=memoryful --format "{{.Names}}\t{{.Status}}"`
 
 Service: `$1` — accepts either the compose service name (`app`, `mcp`, `db`, `celery`,
-`redis`, `minio`, `ollama`, `pubsub-emulator`) or the full container name like
+`redis`, `seaweedfs`, `ollama`, `pubsub-emulator`) or the full container name like
 `memoryful-app-local`. Line count: `$2`.
 
 **If `$1` came through empty**, I invoked this bare. Default to `app` and say so — don't
@@ -34,6 +34,6 @@ Then:
   compose command is `alembic upgrade head && uvicorn ...`, so a bad migration means uvicorn
   never starts), missing `--env-file .env.local`, or a `.env.local.secrets` value that
   overrode a placeholder with an empty string.
-- `memoryful-minio-init` is a one-shot seeder — `Exited (0)` after `minio seed complete` is
+- `memoryful-seaweedfs-init` is a one-shot seeder — `Exited (0)` after `seaweedfs seed complete` is
   correct, not a fault.
 - Propose a fix. Do not apply it unless I ask.

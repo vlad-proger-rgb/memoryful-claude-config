@@ -4,13 +4,13 @@ allowed-tools: Bash(docker:*), Bash(curl http://localhost:*), Read
 ---
 
 **Destructive**, but usually cheaper than it sounds — measured end to end at roughly one
-minute. `down -v` deletes four volumes: `postgres_data_local`, `minio_data_local`,
+minute. `down -v` deletes four volumes: `postgres_data_local`, `seaweedfs_data_local`,
 `redis_data_local`, `ollama_data_local`. Three of them re-seed themselves on the next `up`:
 
 - **Postgres** — `docker/init-restore-db.sh` reloads `backups/neondb_backup_latest.dump`.
   It only runs when the volume is empty, which is exactly the case after `down -v`. If the
   dump is missing it logs and starts empty rather than failing, so this can't wedge.
-- **MinIO** — `minio-init` re-mirrors `bucket_base/` (~6 MiB).
+- **SeaweedFS** — `seaweedfs-init` re-syncs `bucket_base/` (~6 MiB).
 - **Redis** — cache only, nothing to recover.
 
 Before doing anything:

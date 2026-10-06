@@ -84,7 +84,7 @@ DENY: list[Rule] = rules(
 ASK: list[Rule] = rules(
     (
         r"docker\s+compose[^\n]*\bdown\b[^\n]*\s-v\b",
-        "deletes every local volume — the DB restores itself on next up, but MinIO and "
+        "deletes every local volume — the DB restores itself on next up, but SeaweedFS and "
         "any pulled Ollama model do not",
     ),
     (r"\bdocker\s+volume\s+rm\b", "deletes a Docker volume"),

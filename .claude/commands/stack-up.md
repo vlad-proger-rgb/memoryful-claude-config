@@ -21,9 +21,9 @@ Then:
 2. Health-check the API: `curl -s http://localhost:8000/` should return
    `{"code":200,"msg":"Memoryful is running!"}`.
 3. For any container not in a running state, pull its last 40 log lines and diagnose —
-   **except `memoryful-minio-init`, which is a one-shot seeder and is *supposed* to exit.**
-   It mirrors `bucket_base/` into the local MinIO bucket and stops; `Exited (0)` with
-   `minio seed complete` in its log is success, not a failure to report.
+   **except `memoryful-seaweedfs-init`, which is a one-shot seeder and is *supposed* to exit.**
+   It mirrors `bucket_base/` into the local SeaweedFS bucket and stops; `Exited (0)` with
+   `seaweedfs seed complete` in its log is success, not a failure to report.
 4. The `app` container runs `alembic upgrade head` before uvicorn. If it's down, check its
    logs for an Alembic error before assuming anything else — a failed migration stops the
    chain and uvicorn never starts.
