@@ -36,8 +36,13 @@ def run(command: list[str], cwd: Path) -> None:
 
 def venv_bin(name: str) -> str:
     """Prefer the backend venv's copy, fall back to whatever is on PATH."""
-    exe = BACKEND / ".venv" / "Scripts" / f"{name}.exe"
-    return str(exe) if exe.exists() else name
+    for exe in (
+        BACKEND / ".venv" / "Scripts" / f"{name}.exe",
+        BACKEND / ".venv" / "bin" / name,
+    ):
+        if exe.exists():
+            return str(exe)
+    return name
 
 
 def main() -> None:

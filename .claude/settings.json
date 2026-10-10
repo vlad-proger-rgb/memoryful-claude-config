@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect_prod.py\"",
+            "command": "py=$(command -v python || command -v python3) || { echo 'protect_prod: no python or python3 on PATH' >&2; exit 2; }; \"$py\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect_prod.py\"",
             "timeout": 10
           }
         ]
@@ -81,7 +81,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/ticktick_scope.py\"",
+            "command": "py=$(command -v python || command -v python3) || { echo 'ticktick_scope: no python or python3 on PATH' >&2; exit 2; }; \"$py\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/ticktick_scope.py\"",
             "timeout": 10
           }
         ]
@@ -93,12 +93,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/format_file.py\"",
+            "command": "py=$(command -v python || command -v python3) || { echo 'format_file: no python or python3 on PATH' >&2; exit 2; }; \"$py\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/format_file.py\"",
             "timeout": 60
           },
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/typecheck_file.py\"",
+            "command": "py=$(command -v python || command -v python3) || { echo 'typecheck_file: no python or python3 on PATH' >&2; exit 2; }; \"$py\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/typecheck_file.py\"",
             "timeout": 120
           }
         ]
