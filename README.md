@@ -25,17 +25,8 @@ with that repo. Only the workspace-level configuration lives here.
 
 ## Setting up a new machine
 
-```bash
-git clone <this-repo> Memoryful
-cd Memoryful
-git clone <backend-repo>  memoryful-backend
-git clone <frontend-repo> memoryful-frontend
-cp .claude/settings.local.json.example .claude/settings.local.json   # then fill in tokens
-```
-
-`settings.local.json` is deliberately absent from the repo. It carries the TickTick API
-token and any machine-specific overrides; recreate it from the example and paste tokens
-from your password manager.
+See [SETUP.md](SETUP.md): tools, cloning, every gitignored file the repos need and what
+breaks without it, and the per-machine editor steps.
 
 ## What's in here
 
