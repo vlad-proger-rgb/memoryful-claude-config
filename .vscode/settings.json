@@ -20,12 +20,12 @@
         "memoryful-frontend"
     ],
     "ruff.configuration": "./memoryful-backend/pyproject.toml",
-    "mypy-type-checker.importStrategy": "useBundled",
-    "mypy-type-checker.path": ["${workspaceFolder}/memoryful-backend/.venv/Scripts/mypy.exe"],
+    "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.cwd": "${workspaceFolder}/memoryful-backend",
     "python.terminal.shellIntegration.enabled": false,
     "python.terminal.activateEnvironment": false,
     "terminal.integrated.environmentChangesRelaunch": false,
+    "task.reconnection": false,
     "terminal.integrated.automationProfile.windows": {
         "path": "powershell.exe"
     }

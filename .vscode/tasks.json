@@ -1,11 +1,39 @@
-﻿{
+{
     "version": "2.0.0",
     "tasks": [
         {
             "label": "BE",
-            "type": "process",
+            "type": "shell",
             "command": "powershell.exe",
-            "args": ["-NoExit", "-Command", "& .venv/Scripts/Activate.ps1; cls"],
+            "args": [
+                "-NoExit",
+                "-Command",
+                "& .venv/Scripts/Activate.ps1; cls"
+            ],
+            "windows": {
+                "command": "powershell.exe",
+                "args": [
+                    "-NoExit",
+                    "-Command",
+                    "& .venv/Scripts/Activate.ps1; cls"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-i",
+                    "-c",
+                    "source .venv/bin/activate; zsh -i"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-i",
+                    "-c",
+                    "source .venv/bin/activate; bash -i"
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}/memoryful-backend"
             },
@@ -24,9 +52,33 @@
         },
         {
             "label": "FE",
-            "type": "process",
+            "type": "shell",
             "command": "powershell.exe",
-            "args": ["-NoExit", "-Command", "cls"],
+            "args": [
+                "-NoExit",
+                "-Command",
+                "cls"
+            ],
+            "windows": {
+                "command": "powershell.exe",
+                "args": [
+                    "-NoExit",
+                    "-Command",
+                    "cls"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-i"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-i"
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}/memoryful-frontend"
             },
@@ -45,9 +97,33 @@
         },
         {
             "label": "GCS",
-            "type": "process",
+            "type": "shell",
             "command": "powershell.exe",
-            "args": ["-NoExit", "-Command", "cls"],
+            "args": [
+                "-NoExit",
+                "-Command",
+                "cls"
+            ],
+            "windows": {
+                "command": "powershell.exe",
+                "args": [
+                    "-NoExit",
+                    "-Command",
+                    "cls"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-i"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-i"
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -66,9 +142,29 @@
         },
         {
             "label": "Py",
-            "type": "process",
+            "type": "shell",
             "command": "${workspaceFolder}/memoryful-backend/.venv/Scripts/python.exe",
-            "args": ["-i"],
+            "args": [
+                "-i"
+            ],
+            "windows": {
+                "command": "${workspaceFolder}/memoryful-backend/.venv/Scripts/python.exe",
+                "args": [
+                    "-i"
+                ]
+            },
+            "osx": {
+                "command": "${workspaceFolder}/memoryful-backend/.venv/bin/python",
+                "args": [
+                    "-i"
+                ]
+            },
+            "linux": {
+                "command": "${workspaceFolder}/memoryful-backend/.venv/bin/python",
+                "args": [
+                    "-i"
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}/memoryful-backend"
             },
