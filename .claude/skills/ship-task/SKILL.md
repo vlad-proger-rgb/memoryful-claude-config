@@ -101,11 +101,9 @@ and saying which is the whole value of this step.
 
 Read the full diff before the maintainer does, and cut:
 
-- **Comments that restate the line below them.** `# print the error` above a `logger.error`
-  is noise. Keep a comment only when it says something the code cannot.
-- **Comments narrating the change** — "now we also handle X". The diff already shows that.
-- **Comments explaining why the old code was wrong.** That is the TickTick comment's job,
-  step 9.
+- **Comments that violate the `comments-policy` skill.** Check every comment the change
+  added against it — in particular comments that restate the code, narrate the change, or
+  explain why the old code was wrong (that belongs in the TickTick comment, step 9).
 - Anything nobody asked for: drive-by renames, reformatting outside the change,
   "while I was here" edits.
 

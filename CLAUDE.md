@@ -47,8 +47,9 @@ docker exec memoryful-redis-local redis-cli -a dev_redis_password --no-auth-warn
   and commit yourself; don't hand it back for me to paste.
 - **Work lands on `dev`, never `main`.** Check the branch before committing — a commit that
   lands on `main` is a headache to move. The workspace-root repo only has `main`.
-- **Comment only what's genuinely surprising, in one line.** If a decision needs a paragraph
-  to defend, refactor until it doesn't. Rationale belongs in the commit message.
+- **No comments by default.** Comment only WHY, never WHAT: 1 line by default, max 3. If
+  code needs a comment to explain why it is unusual, refactor it first. Rationale belongs in
+  the commit message, TODOs in TickTick. Full rules: `comments-policy` skill.
 - **American English everywhere** — `color`, `initialize`, `behavior`, `canceled`. Exception:
   names a library or spec owns, like `settings_customise_sources` and `aria-labelledby`;
   "correcting" those breaks the binding.
