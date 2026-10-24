@@ -61,6 +61,9 @@ docker exec memoryful-redis-local redis-cli -a dev_redis_password --no-auth-warn
   reads as one. Keep it to a few lines — what changed, and what would bite the next person;
   the diff holds the detail. The 1024-char cap truncates silently, but it's a backstop, not
   a target: a comment trimmed to fit was already too long.
+- **Search the board before work that has no task link.** Follow-ups that grew out of
+  feedback often already have a task: run `search_task` with a few keywords at the plan
+  step, and ship against the match so its comment and completion happen in the same pass.
 - **Never *change* anything in production.** No `docker-compose.vm.yml`, no
   `deploy-app.sh`, no deploying, nothing that writes. A hook blocks these; don't work around
   it. Local work runs against a *restored copy* of prod data.
@@ -123,6 +126,14 @@ Both repos commit in the same pass when a change spans them, with mirrored messa
 ## Slash commands
 
 `/stack-up` `/stack-reset` `/logs` `/db-refresh` `/migration` `/verify` — see `.claude/commands/`.
+
+## Memory
+
+Project memories live in `.claude/memory/`, committed so every machine has them. Write new
+ones there, not in the per-machine auto-memory directory, and add the pointer to the index
+below. Same format and rules as auto-memory. Commit them in the same pass as the change that produced them.
+
+@.claude/memory/MEMORY.md
 
 ## Local context
 

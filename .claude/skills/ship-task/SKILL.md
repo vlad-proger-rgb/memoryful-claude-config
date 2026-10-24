@@ -153,3 +153,7 @@ trimmed to fit was already too long.
 
 `mcp__ticktick__complete_task`. Last, and only after the comment exists — a task closed with
 no write-up is the one nobody can reconstruct later.
+
+Then re-read the task. Closing has backslash-escaped bodies written in the TickTick app
+(`\(`, `\=`, `\{`); if that happened, tell the maintainer and offer to restore the body
+from the step 1 copy with `update_task`.
