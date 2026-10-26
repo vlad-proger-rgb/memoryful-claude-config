@@ -29,6 +29,7 @@ Code communicates intent through clear naming, small focused functions, and prop
 | Explaining what code does | Improve the code instead |
 | Commenting bad code | Fix the code instead |
 | Noise / obvious annotations | Remove them |
+| Restating a type's shape (`// Array of tag IDs`, operators the type already lists) | Remove them — the type is the documentation |
 | Labels on template blocks (`<!-- Tags -->`) | Remove them, or extract a component |
 | Commented-out dead code | Delete it — Git history exists |
 | Version-control comments | Use Git commits |
@@ -53,6 +54,7 @@ A comment that is incorrect must be fixed or removed. A comment that mixes a res
 | Workaround for a browser, platform or library behavior | Yes — explains WHY | Inline comment naming the behavior |
 | Value or class that looks wrong but is intentional | Yes — explains WHY | Inline comment stating the reason |
 | Contract owned by the other repo or an external API | Yes — explains WHY | Inline comment stating the contract |
+| Group label in a long flat declaration (settings fields, registration lists) | Allowed — organization | One short line naming the group (`# Postgres`) |
 | Linter / type-checker suppression | Yes — directive | Narrowest code (`# type: ignore[code]`, `# noqa: X`, `eslint-disable-next-line rule`), with a reason when not obvious |
 
 Examples from this codebase:
