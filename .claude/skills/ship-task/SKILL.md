@@ -94,6 +94,15 @@ Then exercise the actual path in the browser preview, **at 1280 and at 375**. Mo
 first-class target here, not a follow-up; anything that only misbehaves narrow is a real
 defect, not a polish item.
 
+For a frontend change, the same run also checks:
+
+- the console has no new errors
+- the network panel shows no duplicate requests for one action (`memoryful-frontend/CLAUDE.md`
+  § Data fetching)
+- any `v-html` renders only sanitized or trusted content
+- no token or personal data was put into `localStorage` / `sessionStorage`
+- a new dependency's bundle size is worth what it adds
+
 Report pass/fail with the output. Never "should work" — either it was exercised or it wasn't,
 and saying which is the whole value of this step.
 
@@ -141,6 +150,10 @@ a8745db — <what changed, a line or two>
 ```
 
 Two repos means both shas, labeled.
+
+A non-obvious discovery from the task — a gotcha, a constraint, a decision — lands in exactly one
+durable place before the task closes: a `CLAUDE.md` line, a project memory, or this comment. If
+it is not worth keeping, say so to the maintainer; never leave it only in the session.
 
 Keep it to a few lines. The diff holds the detail; this holds what the diff can't say. Don't
 write "not pushed yet" or any other state claim — it is wrong within the day and nobody
